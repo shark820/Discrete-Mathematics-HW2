@@ -135,19 +135,16 @@ void transitiveClosure(vector<vector<int>>& R) {
     printMatrix(R);
 }
 
-// 추가 기능: 역관계 구하기
-void printInverseRelation(const vector<vector<int>>& R) {
-    vector<vector<int>> R_inv(N, vector<int>(N));
+// 추가 기능: 빈대칭성검사
+bool isAntiSymmetric(const vector<vector<int>>& R) {
     for (int i=0; i<N; i++) {
-        for (int j=0; j<N; j++) {
-            R_inv[j][i] = R[i][j];
+        for (int j=i+1; j<N; j++) {
+            if (R[i][j]==1 && R[j][i]==1) {
+                return false;
+            }
         }
     }
-    cout<<"\n--- Additional Feature: Inverse Relation ---";
-    cout<<"\nOriginal relation R matrix:\n";
-    printMatrix(R);
-    cout<<"Inverse relation R^{-1} matrix (R's transpose):\n";
-    printMatrix(R_inv);
+    return true;
 }
 
 
@@ -201,7 +198,18 @@ int main() {
         }
     }
 
-    printInverseRelation(R);
+    cout<<"\n--- Partial Order Relation Check ---\n";
+    bool as = isAntiSymmetric(R);
+  
+    cout<<"1. Reflexive: "<<(r ? "O" : "X")<<endl;
+    cout<<"2. Anti-symmetric: "<<(as ? "O" : "X")<<endl;
+    cout<<"3. Transitive: "<<(t ? "O" : "X")<<endl;
+
+    if (r && as && t) {
+        cout<<"\n>> Result: The input relation is a Partial Order (POSET).\n";
+    } else {
+        cout<<"\n>> Result: The input relation is NOT a Partial Order.\n";
+    }
 
     return 0;
 }
